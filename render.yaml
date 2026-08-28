@@ -1,0 +1,114 @@
+services:
+  - type: web
+    name: sesi-presenca-api
+    runtime: node
+    rootDir: backend
+    plan: 0.5c-512mb
+    region: virginia
+    buildCommand: npm ci && npx prisma generate
+    preDeployCommand: npx prisma migrate deploy
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: IA_API_KEY
+        generateValue: true
+      - key: PYTHON_INTERNAL_HOSTPORT
+        fromService:
+          type: web
+          name: sesi-presenca-face
+          property: hostport
+      - key: JWT_EXPIRES_IN
+        value: 1h
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: IA_MIN_CONFIDENCE_SCORE
+        value: "0.70"
+      - key: PYTHON_TIMEOUT_MS
+        value: "10000"
+      - key: JSON_BODY_LIMIT
+        value: 1mb
+      - key: RATE_LIMIT_WINDOW_MS
+        value: "900000"
+      - key: RATE_LIMIT_MAX
+        value: "300"
+      - key: AUTH_RATE_LIMIT_MAX
+        value: "20"
+      - key: IA_RATE_LIMIT_MAX
+        value: "120"
+      - key: SECOND_FACTOR_RATE_LIMIT_MAX
+        value: "8"
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: ALLOW_LOCAL_CORS
+        value: "false"
+      - key: ENABLE_API_DOCS
+        value: "false"
+      - key: FREQUENCIA_MINIMA_PERCENTUAL
+        value: "75"
+      - key: AUDIT_RETENTION_DAYS
+        value: "180"
+
+  - type: web
+    name: sesi-presenca-face
+    runtime: docker
+    rootDir: python_api
+    plan: 1c-2g
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    disk:
+      name: biometric-data
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: NODE_INTERNAL_HOSTPORT
+        fromService:
+          type: web
+          name: sesi-presenca-api
+          property: hostport
+      - key: IA_API_KEY
+        fromService:
+          type: web
+          name: sesi-presenca-api
+          envVarKey: IA_API_KEY
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ALLOW_LOOPBACK_CORS
+        value: "false"
+      - key: BIOMETRIC_DATA_DIR
+        value: /app/data
+      - key: NODE_MIN_FACE_SCORE
+        value: "0.70"
+      - key: NODE_TIMEOUT_SEGUNDOS
+        value: "10"
+      - key: MAX_IMAGE_BYTES
+        value: "5242880"
+      - key: FACE_TOLERANCE
+        value: "0.52"
+      - key: FACE_MARGIN
+        value: "0.07"
+      - key: FACE_NUM_JITTERS
+        value: "1"
+      - key: FACE_BLUR_RECOGNITION_MIN
+        value: "35"
+      - key: FACE_BLUR_ENROLL_MIN
+        value: "45"

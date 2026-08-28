@@ -1,0 +1,14 @@
+const { Router } = require('express');
+const relatorioController = require('./relatorio.controller');
+const authenticate = require('../../middlewares/authenticate');
+const authorize = require('../../middlewares/authorize');
+const validate = require('../../middlewares/validate');
+const schemas = require('../../validators/relatorio.validator');
+const ROLES = require('../../constants/roles');
+const router = Router();
+router.use(authenticate);
+router.get('/mensal', authorize([ROLES.ADMIN, ROLES.SECRETARIA]), relatorioController.getRelatorioMensal);
+router.get('/cozinha', authorize([ROLES.ADMIN, ROLES.SECRETARIA, ROLES.COZINHA]), validate(schemas.cozinhaSchema), relatorioController.getCozinha);
+router.get('/secretaria/ausentes', authorize([ROLES.ADMIN, ROLES.SECRETARIA]), validate(schemas.ausentesSchema), relatorioController.getAusentes);
+router.get('/secretaria/baixa-frequencia', authorize([ROLES.ADMIN, ROLES.SECRETARIA]), validate(schemas.baixaFrequenciaSchema), relatorioController.getBaixaFrequencia);
+module.exports = router;

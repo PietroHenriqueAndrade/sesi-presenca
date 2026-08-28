@@ -1,0 +1,41 @@
+INTEGRAÇÃO PYTHON / FLUTTER / NODE / REACT — ROTA SESI
+
+1. NODE
+   cd backend
+   npm ci
+   npx prisma generate
+   npx prisma db push
+   npx prisma db seed
+   npm run dev
+
+2. PYTHON (recomendado: Python 3.11)
+   cd python_api
+   py -3.11 -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   python -m pip install -r requirements.txt
+   Copie .env.example para .env e use a MESMA IA_API_KEY do Node.
+   python run.py
+
+3. REACT
+   O cadastro facial pertence ao Dashboard, não ao terminal Flutter.
+   ADMIN/SECRETARIA -> seleciona aluno -> confirma a própria senha -> Node cria
+   token de cadastro por 5 minutos -> React envia 3 fotos ao Python usando esse token.
+
+4. FLUTTER
+   O aplicativo é terminal: Splash -> Login -> Reconhecimento.
+   Emulador: TCC_SERVER_IP=10.0.2.2
+   Tablet:   TCC_SERVER_IP=<IPv4 do PC na mesma rede>
+
+5. RECONHECIMENTO
+   Flutter/WebView -> Python /reconhecer (Bearer JWT)
+   -> Node /ia/registrar-presenca (x-api-key)
+   -> PostgreSQL.
+
+6. GÊMEOS / AMBIGUIDADE
+   O Python compara identidade por conjunto de fotos e recusa escolha automática
+   quando os dois melhores candidatos ficam próximos. O Dashboard pode marcar
+   alunos como caso especial e gerar código pessoal. A confirmação passa por
+   /confirmar-ambiguidade -> Node /ia/resolver-ambiguidade.
+
+7. LGPD
+   Não publicar banco_alunos/, mapeamento_alunos.json populado ou .env.

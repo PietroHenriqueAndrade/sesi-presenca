@@ -1,0 +1,49 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Cobertura de testes
+coverage/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# IntelliJ / WebStorm
+.idea/
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Build
+dist/
+build/
+
+# Cache
+.cache/
+
+# Arquivos de ambiente do sistema operacional
+desktop.ini
+
+mapeamento_alunos.json
+exportar_uuids.js

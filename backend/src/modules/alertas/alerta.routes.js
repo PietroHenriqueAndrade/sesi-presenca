@@ -1,0 +1,12 @@
+const { Router } = require('express');
+const alertaController = require('./alerta.controller');
+const authenticate = require('../../middlewares/authenticate');
+const authorize = require('../../middlewares/authorize');
+const validate = require('../../middlewares/validate');
+const { alertaIdSchema } = require('../../validators/alerta.validator');
+const ROLES = require('../../constants/roles');
+const router = Router();
+router.use(authenticate);
+router.get('/', authorize([ROLES.ADMIN, ROLES.SECRETARIA, ROLES.PROFESSOR]), alertaController.listar);
+router.patch('/:id/resolver', authorize([ROLES.ADMIN, ROLES.SECRETARIA]), validate(alertaIdSchema), alertaController.resolver);
+module.exports = router;

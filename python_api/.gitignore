@@ -1,0 +1,22 @@
+# Segredos / ambiente
+.env
+.env.*
+!.env.example
+
+# Biometria local - nunca versionar fotos/templates capturados
+banco_alunos/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Arquivos locais
+presencas.csv
+.DS_Store
+.vscode/
+.idea/
+
+# Mapeamento biométrico contém dados pessoais e deve ficar no volume persistente.
+mapeamento_alunos.json

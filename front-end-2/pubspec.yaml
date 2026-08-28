@@ -1,0 +1,44 @@
+name: tcc_face
+description: >-
+  Aplicativo Flutter do terminal de presença escolar por reconhecimento facial,
+  integrado ao backend Node.js, ao serviço Python de biometria e à fila offline local.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Gerenciamento de estado leve, utilizado pelos controllers/providers.
+  provider: ^6.1.2
+
+  # Cliente HTTP para Backend Node.js e serviço Python.
+  http: ^1.2.2
+
+  # Persistencia local real para fila offline de presencas.
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
+  # Icones nativos do Material (cupertino incluso por padrao do template).
+  cupertino_icons: ^1.0.8
+  
+  # Câmera nativa mantida como fallback; o fluxo principal usa WebView local.
+  camera: 0.10.5+9
+  shared_preferences: ^2.5.5
+  flutter_secure_storage: ^11.0.0
+  webview_flutter: ^4.14.1
+  permission_handler: 11.3.1
+  webview_flutter_android: ^4.14.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/biometria/
+    - assets/branding/

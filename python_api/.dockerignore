@@ -1,0 +1,9 @@
+.venv
+venv
+__pycache__
+*.pyc
+.env
+banco_alunos
+mapeamento_alunos.json
+presencas.csv
+tests

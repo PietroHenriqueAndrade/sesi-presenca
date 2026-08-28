@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#e30613" />
+  <title>SESI • Serviço de Reconhecimento Facial</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <main class="status-shell">
+    <section class="status-card">
+      <img src="/static/img/sesi-logo.png" alt="SESI" class="logo" />
+      <span class="eyebrow">SERVIÇO DE INTELIGÊNCIA ARTIFICIAL</span>
+      <h1>Reconhecimento facial ativo</h1>
+      <p>Esta página é apenas de diagnóstico. O cadastro biométrico é feito pelo Dashboard administrativo e a presença pelo terminal Flutter.</p>
+      <div class="health" id="health"><i></i><div><strong>Verificando serviço...</strong><span>Aguardando resposta de /health</span></div></div>
+      <div class="stats">
+        <article><strong id="identidades">—</strong><span>identidades carregadas</span></article>
+        <article><strong id="fotos">—</strong><span>fotos de referência</span></article>
+        <article><strong id="mapeados">—</strong><span>alunos mapeados</span></article>
+      </div>
+      <small>SESI Presença • API Python/FastAPI</small>
+    </section>
+  </main>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

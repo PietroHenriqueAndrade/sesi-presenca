@@ -1,0 +1,33 @@
+# Secrets locais
+.env
+.env.*
+**/.env
+**/.env.local
+**/.env.production
+
+# Exemplos seguros que DEVEM ir para o Git
+!.env.example
+!.env.production.example
+!.env.render.example
+!**/.env.example
+!**/.env.production.example
+!**/.env.render.example
+
+# Android signing
+front-end-2/android/key.properties
+front-end-2/android/app/*.jks
+front-end-2/android/app/*.keystore
+
+# Dependências/builds
+**/node_modules/
+**/.dart_tool/
+**/build/
+**/dist/
+**/__pycache__/
+**/*.pyc
+
+# Dados sensíveis/persistentes
+python_api/banco_alunos/
+python_api/mapeamento_alunos.json
+python_api/data/
+backups/

@@ -1,0 +1,354 @@
+<!doctype html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <meta
+    name="theme-color"
+    content="#111111"
+  />
+
+  <title>
+    SESI Presença
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="/static/css/style.css"
+  />
+
+</head>
+
+<body>
+
+  <main class="terminal-shell">
+
+    <section
+      class="camera-stage"
+      id="cameraStage"
+    >
+
+      <video
+        id="webcam"
+        autoplay
+        playsinline
+        muted
+      ></video>
+
+      <canvas
+        id="canvas"
+        hidden
+      ></canvas>
+
+      <div class="camera-vignette"></div>
+
+      <header class="terminal-topbar">
+
+        <div class="brand-wrap">
+
+          <div class="logo-box">
+
+            <img
+              class="sesi-logo"
+              src="/static/img/sesi-logo.png"
+              alt="SESI"
+            />
+
+          </div>
+
+          <div class="brand-copy">
+
+            <strong>
+              Terminal de Presença
+            </strong>
+
+            <span>
+              Reconhecimento facial
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="top-actions">
+
+          <div class="clock-box">
+
+            <strong id="terminalClock">
+              --:--
+            </strong>
+
+            <span>
+              SESI Presença
+            </span>
+
+          </div>
+
+          <div
+            class="status-pill"
+            id="serviceStatus"
+          >
+
+            <i></i>
+
+            <span>
+              Inicializando...
+            </span>
+
+          </div>
+
+          <button
+            class="logout-button"
+            id="btnLogout"
+            type="button"
+          >
+            Sair
+          </button>
+
+        </div>
+
+      </header>
+
+      <div class="face-guide-wrap">
+
+        <div class="face-guide">
+
+          <span class="guide-corner corner-tl"></span>
+          <span class="guide-corner corner-tr"></span>
+          <span class="guide-corner corner-bl"></span>
+          <span class="guide-corner corner-br"></span>
+
+          <div class="face-oval"></div>
+
+          <div
+            class="scan-line"
+            id="scanLine"
+          ></div>
+
+        </div>
+
+        <div class="guide-label">
+
+          <span class="guide-dot"></span>
+
+          Mantenha o rosto dentro da marcação
+
+        </div>
+
+      </div>
+
+      <div
+        class="camera-shade"
+        id="cameraShade"
+      >
+
+        <div class="shade-card">
+
+          <div
+            class="shade-icon"
+            id="shadeIcon"
+          >
+            ✓
+          </div>
+
+          <strong id="shadeTitle">
+            Presença confirmada
+          </strong>
+
+          <span id="shadeText">
+            Pronto para o próximo aluno
+          </span>
+
+        </div>
+
+      </div>
+
+      <footer class="terminal-bottom">
+
+        <div class="instruction-area">
+
+          <span class="eyebrow">
+            IDENTIFICAÇÃO FACIAL
+          </span>
+
+          <h1 id="instructionTitle">
+            Posicione seu rosto no centro
+          </h1>
+
+          <p id="instructionText">
+            Olhe para a câmera e mantenha o rosto dentro da marcação.
+          </p>
+
+        </div>
+
+        <button
+          id="btnRecognize"
+          class="primary-button"
+          type="button"
+        >
+
+          <span class="button-icon">
+            ◎
+          </span>
+
+          <span id="buttonText">
+            Registrar presença
+          </span>
+
+        </button>
+
+        <div class="terminal-info">
+
+          <div>
+
+            <span>
+              Terminal
+            </span>
+
+            <strong id="operatorName">
+              Operador autorizado
+            </strong>
+
+          </div>
+
+          <small id="apiInfo">
+            Conectando aos serviços...
+          </small>
+
+        </div>
+
+      </footer>
+
+    </section>
+
+  </main>
+
+  <div
+    class="modal-backdrop hidden"
+    id="secondFactorModal"
+  >
+
+    <section
+      class="modal-card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="secondFactorTitle"
+    >
+
+      <div class="modal-badge">
+        Verificação adicional
+      </div>
+
+      <h2 id="secondFactorTitle">
+        Confirme sua identidade
+      </h2>
+
+      <p>
+        O sistema encontrou rostos muito semelhantes.
+        Digite seu código pessoal de 6 dígitos para concluir.
+      </p>
+
+      <label for="secondFactorCode">
+        Código pessoal
+      </label>
+
+      <input
+        id="secondFactorCode"
+        inputmode="numeric"
+        maxlength="6"
+        autocomplete="one-time-code"
+        placeholder="000000"
+      />
+
+      <div
+        id="secondFactorError"
+        class="inline-error hidden"
+      ></div>
+
+      <div class="modal-actions">
+
+        <button
+          id="btnCancelSecondFactor"
+          class="secondary-button"
+          type="button"
+        >
+          Cancelar
+        </button>
+
+        <button
+          id="btnConfirmSecondFactor"
+          class="primary-button compact"
+          type="button"
+        >
+          Confirmar
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div
+    class="toast hidden"
+    id="toast"
+  >
+
+    <strong id="toastTitle"></strong>
+    <span id="toastText"></span>
+
+  </div>
+
+  <script>
+
+    function atualizarRelogioTerminal() {
+
+      const elemento =
+        document.getElementById(
+          'terminalClock'
+        );
+
+      if (!elemento) {
+        return;
+      }
+
+      elemento.textContent =
+        new Intl.DateTimeFormat(
+          'pt-BR',
+          {
+            timeZone:
+              'America/Sao_Paulo',
+
+            hour:
+              '2-digit',
+
+            minute:
+              '2-digit'
+          }
+        ).format(
+          new Date()
+        );
+    }
+
+    atualizarRelogioTerminal();
+
+    setInterval(
+      atualizarRelogioTerminal,
+      15000
+    );
+
+  </script>
+
+  <script src="/static/js/app.js"></script>
+
+</body>
+
+</html>
