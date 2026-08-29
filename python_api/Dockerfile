@@ -3,6 +3,8 @@ FROM python:3.11-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
+    CMAKE_BUILD_PARALLEL_LEVEL=1 \
+    MAKEFLAGS=-j1 \
     APP_ENV=production \
     BIOMETRIC_DATA_DIR=/app/data
 
