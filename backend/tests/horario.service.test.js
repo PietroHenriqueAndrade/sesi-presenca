@@ -1,6 +1,6 @@
 let agora = { dia: 1, hora: '07:05' };
 
-function fakeDayjs() {
+function mockFakeDayjs() {
   return {
     day: () => agora.dia,
     format: () => agora.hora,
@@ -32,7 +32,7 @@ function fakeDayjs() {
   };
 }
 
-jest.mock('../src/utils/dateHelpers', () => ({ agoraDayjs: jest.fn(() => fakeDayjs()) }));
+jest.mock('../src/utils/dateHelpers', () => ({ agoraDayjs: jest.fn(() => mockFakeDayjs()) }));
 jest.mock('../src/modules/horarios/horario.repository', () => ({
   findByTurmaEDia: jest.fn(),
   findConflito: jest.fn(),

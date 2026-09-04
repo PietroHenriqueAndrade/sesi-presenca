@@ -83,7 +83,7 @@ class ApiConfig {
 
   static String get pythonBaseUrl {
     if (pythonUrl.trim().isNotEmpty) return _validarUrl(pythonUrl, 'TCC_PYTHON_URL');
-    if (serverUrl.trim().isNotEmpty) return '${nodeBaseUrl}/face-api';
+    if (serverUrl.trim().isNotEmpty) return '$nodeBaseUrl/face-api';
     return _validarUrl('$serverScheme://$ipServidor:$pythonPort', 'Servidor Python');
   }
 

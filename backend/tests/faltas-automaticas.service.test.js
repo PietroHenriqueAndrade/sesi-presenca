@@ -1,9 +1,9 @@
-let diaSemana = 1;
-const dataHoje = new Date('2026-08-24T00:00:00.000Z');
+let mockDiaSemana = 1;
+const mockDataHoje = new Date('2026-08-24T00:00:00.000Z');
 
 jest.mock('../src/utils/dateHelpers', () => ({
-  agoraDayjs: jest.fn(() => ({ day: () => diaSemana })),
-  dataHojeDb: jest.fn(() => dataHoje),
+  agoraDayjs: jest.fn(() => ({ day: () => mockDiaSemana })),
+  dataHojeDb: jest.fn(() => mockDataHoje),
   agora: jest.fn(() => new Date('2026-08-24T18:00:00.000Z')),
 }));
 jest.mock('../src/modules/alunos/aluno.service', () => ({ buscarAlunoPorId: jest.fn() }));
@@ -21,13 +21,13 @@ const service = require('../src/modules/presencas/presenca.service');
 describe('PresencaService - faltas automáticas', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    diaSemana = 1; // SEGUNDA
+    mockDiaSemana = 1; // SEGUNDA
     prisma.presenca.findMany.mockResolvedValue([]);
     prisma.presenca.createMany.mockResolvedValue({ count: 0 });
   });
 
   test('não processa faltas aos domingos', async () => {
-    diaSemana = 0;
+    mockDiaSemana = 0;
     const resultado = await service.processarFaltasAutomaticasDoDia();
     expect(resultado).toEqual({ inseridas: 0 });
     expect(prisma.horario.findMany).not.toHaveBeenCalled();

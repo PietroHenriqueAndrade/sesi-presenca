@@ -1,5 +1,8 @@
-// 1. OBRIGATÓRIO: Carrega o .env para dentro do ambiente de testes do Jest
-require('dotenv').config(); 
+// Carrega o .env quando existir e garante uma configuração isolada para o teste.
+// Assim o middleware testa autenticação (401) em vez de falhar antes por integração ausente (503).
+require('dotenv').config();
+process.env.IA_API_KEY ||= 'ia-test-key-0123456789abcdef0123456789abcdef';
+process.env.PYTHON_API_URL ||= 'http://127.0.0.1:5000';
 
 const request = require('supertest');
 const app = require('../src/app');
